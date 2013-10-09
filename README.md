@@ -1,5 +1,7 @@
 # SimpleAcl
 
+[![Build Status](https://travis-ci.org/ifeelgoods/simple_acl.png?branch=master)](https://travis-ci.org/ifeelgoods/simple_acl)
+
 This gem eases the implementation of ACL in Ruby (especially Rails).
 
 All access are refused is only rule by default.
@@ -88,6 +90,6 @@ SimpleAcl::Configuration.authorized_roles = [:admin, :user]
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-Inspired from `racl-rails` and `racl`
+Inspired from `racl-rails` and `racl`.
 https://github.com/ifeelgoods/racl/
 https://github.com/ifeelgoods/racl-rails/
