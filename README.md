@@ -2,7 +2,7 @@
 
 This gem eases the implementation of ACL in Ruby (especially Rails).
 
-All access are refused is only rule by default.
+All access are refused : the only default rule.
 
 ## Installation
 
@@ -47,11 +47,11 @@ rescue_from ExceptionUnauthorized do
 end
 ```
 
-## Configuration
+### Define yours ACL
 
 To configure the ability of a role you can use:
 
-* `acl_user` 
+* `acl_user`
 * `acl_admin`
 * `acl_guest`
 
@@ -75,6 +75,35 @@ Example:
 ```ruby
     acl_role(:guest, show: true)
 ```
+
+### Define assertions in your ACL
+
+An assertion has to return `TrueClass` or `FalseClass`.
+(other values will have same effect than a `FalseClass`)
+
+You can also use lambda to write advanced assertion.
+The two parameters `current_role` and `values` are passed to the lambda,
+you can use these for your assertion.
+
+Example:
+
+```ruby
+  acl_guest privileges: {
+      show: lambda{|current_role, values| YourModel.find(values[:id]).guest_access?},
+  }
+
+```
+
+If you have values containing `params` and your user model `current_user`
+
+```ruby
+  acl_user privileges: {
+      update: lambda{|current_role, values| values[:current_user].profile_id == values[:params][:id]},
+  }
+
+```
+
+## Configuration
 
 In an initializer, you can specify the role you want to use.
 (defaults are :admin, :user, :guest)
