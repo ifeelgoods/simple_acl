@@ -28,9 +28,6 @@ module SimpleAcl
       acl.configuration.add_role(role, privileges)
     end
 
-    def acl_to_json
-      acl.configuration.acl_privileges.to_json
-    end
   end
 
   # @param values used for custom lambda assertion
@@ -65,7 +62,7 @@ module SimpleAcl
     return Acl.unauthorized unless self.class.acl
 
     begin
-      self.class.acl.check_acl(acl_current_role, params[:action], acl_values)
+      self.class.acl.check_acl(acl_current_role, acl_action, acl_values)
     ensure
       # in case of Thread,current is not cleaned
       Thread.current[:acl_action] = nil

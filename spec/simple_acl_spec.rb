@@ -76,4 +76,54 @@ describe SimpleAcl do
   end
 
 
+    context 'with an action and role defined manually and without params' do
+      before(:all) do
+        class WhatEver2
+          include SimpleAcl
+        end
+
+        WhatEver.acl_user(privileges: {create: true})
+        WhatEver.acl_admin({privileges: {update: true}, inherit: :user})
+
+        @whatEver = WhatEver.new
+      end
+
+      before do
+        @whatEver.acl_action = :update
+      end
+
+      subject{@whatEver.do_acl}
+
+      context 'with guest' do
+        before do
+          @whatEver.acl_current_role = :guest
+        end
+
+        it 'refuse access' do
+          expect{subject}.to raise_error(SimpleAcl::ExceptionUnauthorized)
+        end
+      end
+
+      context 'with user' do
+        before do
+          @whatEver.acl_current_role = :user
+        end
+
+        it 'refuse access' do
+          expect{subject}.to raise_error(SimpleAcl::ExceptionUnauthorized)
+        end
+      end
+
+      context 'with admin' do
+        before do
+          @whatEver.acl_current_role = :admin
+        end
+
+        it 'allow access' do
+          expect(subject).to be_true
+        end
+    end
+  end
+
+
 end
