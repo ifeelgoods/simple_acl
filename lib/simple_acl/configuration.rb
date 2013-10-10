@@ -17,10 +17,8 @@ module SimpleAcl
 
     def add_role(role, privileges)
       raise ExceptionConfiguration, ExceptionConfiguration, "Unauthorized role #{role}" unless self.class.authorized_roles.include?(role)
-      privileges.keys.each do |configuration_key|
-        raise ExceptionConfiguration, "Unknow configuration key #{configuration_key}" unless [:privileges, :inherit].include?(configuration_key)
-      end
-      raise ExceptionConfiguration, 'Inherit specified is not defined previously' if privileges[:inherit] && !@acl_privileges[privileges[:inherit]]
+
+      check_keys(privileges)
 
       @acl_privileges[role] = (@acl_privileges[privileges[:inherit]] || {}).merge(privileges[:privileges] || {})
 
@@ -30,6 +28,14 @@ module SimpleAcl
     end
 
     private
+
+    # check defined keys in privileges
+    def check_keys(privileges)
+      privileges.keys.each do |configuration_key|
+        raise ExceptionConfiguration, "Unknow configuration key #{configuration_key}" unless [:privileges, :inherit].include?(configuration_key)
+      end
+      raise ExceptionConfiguration, 'Inherit specified is not defined previously' if privileges[:inherit] && !@acl_privileges[privileges[:inherit]]
+    end
 
     # check of the set up
     def check_set_up(privileges)
