@@ -1,4 +1,4 @@
-# SimpleAcl [![Gem Version](https://badge.fury.io/rb/simple_acl.png)](http://badge.fury.io/rb/simple_acl) [![Build Status](https://travis-ci.org/ifeelgoods/simple_acl.png?branch=master)](https://travis-ci.org/ifeelgoods/simple_acl) [![Code Climate](https://codeclimate.com/github/ifeelgoods/simple_acl.png)](https://codeclimate.com/github/ifeelgoods/simple_acl)
+# SimpleAcl [![Gem Version](https://badge.fury.io/rb/simple_acl.png)](http://badge.fury.io/rb/simple_acl) [![Build Status](https://travis-ci.org/ifeelgoods/simple_acl.png?branch=master)](https://travis-ci.org/ifeelgoods/simple_acl) [![Coverage Status](https://coveralls.io/repos/ifeelgoods/simple_acl/badge.png?branch=master)](https://coveralls.io/r/ifeelgoods/simple_acl?branch=master) [![Code Climate](https://codeclimate.com/github/ifeelgoods/simple_acl.png)](https://codeclimate.com/github/ifeelgoods/simple_acl)
 
 This gem eases the implementation of ACL in Ruby (especially Rails).
 
