@@ -73,7 +73,11 @@ Example:
 ```
 
 ```ruby
-    acl_role(:guest, show: true)
+    acl_role(:guest,
+              privileges: {
+                show: true
+              }
+    )
 ```
 
 ### Define assertions in your ACL
