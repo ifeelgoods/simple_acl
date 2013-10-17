@@ -27,7 +27,7 @@ module SimpleAcl
       return authorized if assertion.class == TrueClass
 
       if assertion.class == Proc && assertion.lambda?
-        assertion_result = assertion.call(current_role, values)
+        assertion_result = assertion.call(values)
         return assert(assertion_result, current_role, values)
       end
 

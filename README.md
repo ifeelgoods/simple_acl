@@ -93,7 +93,7 @@ Example:
 
 ```ruby
   acl_guest privileges: {
-      show: lambda{|current_role, values| YourModel.find(values[:id]).guest_access?},
+      show: lambda{|values| YourModel.find(values[:id]).guest_access?},
   }
 
 ```
@@ -102,18 +102,8 @@ If you have values containing `params` and your user model `current_user`
 
 ```ruby
   acl_user privileges: {
-      update: lambda{|current_role, values| values[:current_user].profile_id == values[:params][:id]},
+      update: lambda{|values| values[:current_user].profile_id == values[:params][:id]},
   }
-
-```
-
-## Configuration
-
-In an initializer, you can specify the role you want to use.
-(defaults are :admin, :user, :guest)
-
-```
-SimpleAcl::Configuration.authorized_roles = [:admin, :user]
 
 ```
 

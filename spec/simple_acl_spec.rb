@@ -3,7 +3,6 @@ require 'spec_helper'
 describe SimpleAcl do
 
   before(:all) do
-    SimpleAcl::Configuration.authorized_roles = [:user, :guest, :admin]
     class WhatEver < Struct.new(:params, :current_role)
       include SimpleAcl
     end

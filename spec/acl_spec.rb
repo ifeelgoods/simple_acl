@@ -12,10 +12,6 @@ describe SimpleAcl::Acl do
   }
   let(:acl_base_instance) { SimpleAcl::Acl.new }
 
-  before(:all) do
-    SimpleAcl::Configuration.authorized_roles += [:role_1, :role_2, :role_3, :role_4]
-  end
-
   describe "#check_acl" do
     subject { acl.check_acl(current_role, action, values) }
 
@@ -67,7 +63,7 @@ describe SimpleAcl::Acl do
         acl_base_instance.configuration.add_role(:role_1,
                                                  {privileges:
                                                     {
-                                                      create: lambda { |current_role, values| values[:id] == 99 }
+                                                      create: lambda { |values| values[:id] == 99 }
                                                     }
                                                  }
         )
@@ -208,7 +204,7 @@ describe SimpleAcl::Acl do
 
     context "assertion is a lambda true" do
       let(:assertion) {
-        lambda { |current_role, values| true }
+        lambda { |values| true }
       }
       let(:current_role) { 'dummy' }
       let(:values) { 'dummy' }
@@ -220,7 +216,7 @@ describe SimpleAcl::Acl do
 
     context "assertion is a lambda using current_role and values" do
       let(:assertion) {
-        lambda { |current_role, values| values[:id] != 5 }
+        lambda { |values| values[:id] != 5 }
       }
       let(:current_role) { 'dummy' }
 

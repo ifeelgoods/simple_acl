@@ -10,20 +10,7 @@ describe SimpleAcl::Configuration do
     }
     subject { configuration_base.add_role(:role_1, privileges) }
 
-    context "is not in the authorized list" do
-      before do
-        SimpleAcl::Configuration.authorized_roles = []
-      end
-      it "raise an ExceptionConfiguration" do
-        expect { subject }.to raise_error(SimpleAcl::ExceptionConfiguration)
-      end
-    end
-
-    context "is authorized" do
-      before do
-        SimpleAcl::Configuration.authorized_roles += [:role_1]
-      end
-
+    context "with basic privileges" do
       it "succeed" do
         expect { subject }.to_not raise_exception
       end
@@ -39,9 +26,6 @@ describe SimpleAcl::Configuration do
     end
 
     describe 'using inherited configuration' do
-      before(:all) do
-        SimpleAcl::Configuration.authorized_roles += [:role_2]
-      end
 
       before do
         @configuration = configuration_base

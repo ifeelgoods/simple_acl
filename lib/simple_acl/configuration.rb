@@ -1,14 +1,6 @@
 module SimpleAcl
   class Configuration
 
-    class << self
-      attr_writer :authorized_roles
-
-      def authorized_roles
-        @authorized_roles ||= [:admin, :user, :guest]
-      end
-    end
-
     attr_reader :acl_privileges
 
     def initialize
@@ -16,8 +8,6 @@ module SimpleAcl
     end
 
     def add_role(role, privileges)
-      raise ExceptionConfiguration, ExceptionConfiguration, "Unauthorized role #{role}" unless self.class.authorized_roles.include?(role)
-
       check_keys(privileges)
 
       @acl_privileges[role] = (@acl_privileges[privileges[:inherit]] || {}).merge(privileges[:privileges] || {})
