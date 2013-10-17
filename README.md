@@ -39,7 +39,7 @@ execution of the code in the action.
 
 When the access is refused to a given role, an `ExceptionUnauthorized`
 exception will be raised.
-Catch it to render/do whatever you want in this case (exemple with Rails):
+Catch it to render/do whatever you want in this case (example with Rails):
 
 ```ruby
 rescue_from ExceptionUnauthorized do
@@ -86,8 +86,7 @@ An assertion has to return `TrueClass` or `FalseClass`.
 (other values will have same effect than a `FalseClass`)
 
 You can also use lambda to write advanced assertion.
-The two parameters `current_role` and `values` are passed to the lambda,
-you can use these for your assertion.
+You can use the variable `values` to the lambda.
 
 Example:
 
