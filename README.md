@@ -2,7 +2,18 @@
 
 This gem eases the implementation of ACL in Ruby (especially Rails).
 
-All access are refused : the only default rule.
+You should be able to use it everywhere you can execute the `do_acl` method before any protected methods.
+
+All access are refused is the only default rule.
+
+## Use case
+
+For example, you're building a powerful API with multiple models behind one RESTful controller.
+
+In this case the ressource accessed is not the model but the controller. That's why ACL should be defined at 
+controller level in this case.
+
+SimpleAcl's goal is to be a perfect tool to perform ACL at this level.
 
 ## Installation
 
@@ -14,9 +25,9 @@ And then execute:
 
     $ bundle install
 
-## Usage
+## Usage with Ruby on Rails
 
-Include the main module:
+Include the main module in your controller:
 
 `include SimpleAcl`
 
