@@ -9,6 +9,10 @@ module SimpleAcl
       @configuration = Configuration.new
     end
 
+    def get_acl(action)
+      configuration.acl_privileges.keys.select{|k| configuration.acl_privileges[k][action] }
+    end
+
     def check_acl(current_role, action, values)
 
       return self.class.unauthorized unless configuration && current_role
