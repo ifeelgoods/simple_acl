@@ -237,4 +237,87 @@ describe SimpleAcl::Acl do
     end
   end
 
+  describe "#filter_params" do
+
+    context "when a filter list is defined" do
+      let(:acl) do
+        acl_base_instance.configuration.add_role(:role_1, filters: {expand: ['option1', 'option2']})
+        acl_base_instance
+      end
+      it "keep specified expand" do
+        params = { expand: 'option1' }
+        acl.filter_params(:role_1, params)
+        expect(params).to eq({expand: 'option1'})
+      end
+      it "remove other expand" do
+        params = { expand: 'unknow,option1'}
+        acl.filter_params(:role_1, params)
+        expect(params).to eq({expand: 'option1'})
+      end
+      it "keep all expand" do
+        params = { expand: 'all' }
+        acl.filter_params(:role_1, params)
+        expect(params).to eq({expand: 'option1,option2'})
+      end
+      it "works when the expected param is missing" do
+        params = { action: 'index' }
+        acl.filter_params(:role_1, params)
+        expect(params).to eq({action:  'index'})
+      end
+    end
+
+    context "when a filter list is no defined" do
+      let(:acl) do
+        acl_base_instance.configuration.add_role(:role_1, privileges: { index: true})
+        acl_base_instance
+      end
+      it "does not filter parameters" do
+        params = { expand: 'param1,param2'}
+        acl.filter_params(:role_1, params)
+        expect(params).to eq({expand: 'param1,param2'})
+      end
+    end
+
+    context "inheriting from another role" do
+      let(:acl) do
+        acl_base_instance.configuration.add_role(:role_1, filters: {expand: ['option1', 'option2']})
+        acl_base_instance.configuration.add_role(:role_2, inherit: :role_1)
+        acl_base_instance
+      end
+
+      it "inherit filters" do
+        params = { expand: 'unknow,option1'}
+        acl.filter_params(:role_2, params)
+        expect(params).to eq({expand: 'option1'})
+      end
+    end
+
+    context "keep all values" do
+      let(:acl) do
+        acl_base_instance.configuration.add_role(:role_1, filters: {expand: ['option1', 'option2']})
+        acl_base_instance.configuration.add_role(:role_2, inherit: :role_1, filters: {expand: :all})
+        acl_base_instance
+      end
+
+      it "keep all values" do
+        params = { expand: 'param1,param2'}
+        acl.filter_params(:role_2, params)
+        expect(params).to eq({expand: 'param1,param2'})
+      end
+    end
+
+    context "rejecting all values" do
+      let(:acl) do
+        acl_base_instance.configuration.add_role(:role_1, filters: {expand: :none})
+        acl_base_instance
+      end
+
+      it "reject all values" do
+        params = { expand: 'param1,param2,none'}
+        acl.filter_params(:role_1, params)
+        expect(params).to eq({expand: ''})
+      end
+    end
+  end
+
 end

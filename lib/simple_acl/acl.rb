@@ -38,12 +38,35 @@ module SimpleAcl
       unauthorized
     end
 
+    def filter_params(role, params)
+      filters = configuration.acl_filters[role.to_sym] || {}
+      filters.each do |key,value|
+        if params.has_key?(key)
+          params[key] = filter(params[key], value)
+        end
+      end
+    end
+
     def self.unauthorized
       raise ExceptionUnauthorized
     end
 
     def self.authorized
       true
+    end
+
+    private
+
+    def filter(values, accepted_values)
+      if accepted_values == :all
+        values
+      elsif accepted_values == :none
+        ''
+      elsif values == 'all'
+        accepted_values.join(',')
+      else
+        (values.split(',') & accepted_values).join(',')
+      end
     end
 
   end

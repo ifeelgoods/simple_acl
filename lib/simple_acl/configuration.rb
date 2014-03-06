@@ -2,15 +2,18 @@ module SimpleAcl
   class Configuration
 
     attr_reader :acl_privileges
+    attr_reader :acl_filters
 
     def initialize
       @acl_privileges = {}
+      @acl_filters = {}
     end
 
     def add_role(role, privileges)
       check_keys(privileges)
 
       @acl_privileges[role] = (@acl_privileges[privileges[:inherit]] || {}).merge(privileges[:privileges] || {})
+      acl_filters[role] = (acl_filters[privileges[:inherit]] || {}).merge(privileges[:filters] || {})
 
       check_set_up(@acl_privileges[role])
 
@@ -22,7 +25,7 @@ module SimpleAcl
     # check defined keys in privileges
     def check_keys(privileges)
       privileges.keys.each do |configuration_key|
-        raise ExceptionConfiguration, "Unknow configuration key #{configuration_key}" unless [:privileges, :inherit].include?(configuration_key)
+        raise ExceptionConfiguration, "Unknow configuration key #{configuration_key}" unless [:privileges, :inherit, :filters].include?(configuration_key)
       end
       raise ExceptionConfiguration, 'Inherit specified is not defined previously' if privileges[:inherit] && !@acl_privileges[privileges[:inherit]]
     end

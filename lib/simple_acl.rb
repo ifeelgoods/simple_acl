@@ -36,7 +36,7 @@ module SimpleAcl
   end
 
   def acl_values
-    Thread.current[:acl_values] ||= defined?(params) ? params : nil
+    Thread.current[:acl_values] ||= { params: (defined?(params) ? params : nil) }
   end
 
   # @param current_role used for the assertion
@@ -63,6 +63,7 @@ module SimpleAcl
 
     begin
       self.class.acl.check_acl(acl_current_role, acl_action, acl_values)
+      self.class.acl.filter_params(acl_current_role, acl_values[:params])
     ensure
       # in case of Thread,current is not cleaned
       Thread.current[:acl_action] = nil
