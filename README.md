@@ -69,6 +69,7 @@ To configure the ability of a role you can use:
 Or the basic method `acl_role` with which you need to specify the role.
 
 The key `privileges` must be a hash of assertions.
+The key `filters` must be a hash of params filters
 The key `inherit` must be the symbol of previous defined role.
 
 Example:
@@ -115,6 +116,38 @@ If you have values containing `params` and your user model `current_user`
       update: lambda{|values| values[:current_user].profile_id == values[:params][:id]}
   }
 
+```
+
+### Define filters for your roles
+
+A filter is a list of allowed tokens for a given parameter. It assume the parameter is a comma delimited string.
+A typical use case for this feature is to accept a prameter that provide a list of options. You want to control which options are available for each role.
+
+Example
+
+```ruby
+  acl_user privileges: { show: true },
+           filters: { features: [ 'opt1', 'opt2', 'opt3'] }
+
+```
+
+The filter above will parse the parameter 'features' and remove all token that are not one of the following `opt1`,`opt2`,`opt3`
+
+a role can inherit filters from its parent. You can overide an inherited filter by redefining it. You can take advantage of the special value below.
+
+* `:all` : Accept any value. It allow to remove an inherited filter
+* `:none` : Reject any value
+
+Example
+
+```ruby
+
+  acl_user privileges: { show: true },
+           filters: { features: [ 'opt1', 'opt2', 'opt3'] }
+
+  acl_guest inherit: :user, filters: { features: :none }
+
+  acl_admin inherit: :user, filters: { features: :all }
 ```
 
 ## Contributing

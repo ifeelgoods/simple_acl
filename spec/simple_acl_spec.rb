@@ -124,5 +124,33 @@ describe SimpleAcl do
     end
   end
 
+  describe "#expand filtering" do
+    before do
+      WhatEver.acl_user(privileges: {show: true}, filters: {expand: ['option1', 'option2']})
+      WhatEver.acl_admin(inherit: :user)
+      @whatEver = WhatEver.new(params, current_role)
+    end
+
+    subject{@whatEver.do_acl}
+
+    context "with filters defined on current role" do
+      let(:current_role) { :user }
+      let(:params) {{ action: :show, expand: 'option1,other'}}
+      it "keep only allowed expand" do
+        subject
+        expect(params[:expand]).to eq('option1')
+      end
+    end
+
+    context "with filters defined on inherited role" do
+      let(:current_role) { :admin }
+      let(:params) {{ action: :show, expand: 'option1,other'}}
+      it "inherit allowed expand" do
+        subject
+        expect(params[:expand]).to eq('option1')
+      end
+    end
+
+  end
 
 end
